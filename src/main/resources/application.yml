@@ -33,6 +33,7 @@ spring:
           max-life-time: 60s
       default-filters:
         - SaveSession
+        - TokenRelay
         - name: RequestRateLimiter
           args:
             redis-rate-limiter:
@@ -89,7 +90,7 @@ spring:
           keycloak:
             client-id: edge-service
             client-secret: polar-keycloak-secret
-            scope: openid
+            scope: openid,roles
         provider:
           keycloak:
             issuer-uri: http://localhost:8080/realms/PolarBookshop
@@ -107,8 +108,9 @@ resilience4j:
         timeoutDuration: 5s
 logging:
   level:
-    io.github.resilience4j: DEBUG
-    org:
-      springframework:
-        cloud:
-          gateway: TRACE
+    org.springframework.session: TRACE
+    org.cloud.gateway: TRACE
+    org.springframework.security: TRACE
+    org.springframework.web: TRACE
+    org.springframework.http: TRACE
+    #io.github.resilience4j: DEBUG
