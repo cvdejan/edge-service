@@ -106,11 +106,39 @@ resilience4j:
     configs:
       default:
         timeoutDuration: 5s
+#logging:
+#  level:
+#    org.springframework.session: TRACE
+#    org.cloud.gateway: TRACE
+#    org.springframework.security: TRACE
+#    org.springframework.web: TRACE
+#    org.springframework.http: TRACE
+#    io.github.resilience4j: DEBUG
 logging:
+  group:
+    circuitbreaker: io.github.resilience4j,org.springframework.cloud.circuitbreaker
   level:
-    org.springframework.session: TRACE
-    org.cloud.gateway: TRACE
-    org.springframework.security: TRACE
-    org.springframework.web: TRACE
-    org.springframework.http: TRACE
-    #io.github.resilience4j: DEBUG
+    circuitbreaker: info
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
+info:
+  system: Polar Bookshop
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, bindings, configprops, env, flyway, functions, health, heapdump, info, loggers, mappings, prometheus
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState, redis
+  metrics:
+    tags:
+      application: ${spring.application.name}
